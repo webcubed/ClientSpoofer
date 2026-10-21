@@ -1,10 +1,10 @@
 [versions]
-fabric-loom = "1.16.1"
-fabric-loader = "0.18.4"
-fabric-api = "0.144.3+26.1"
-minecraft = "26.1"
+fabric-loom = "1.19.2"
+fabric-loader = "0.19.5"
+fabric-api = "0.164.0+26.3"
+minecraft = "26.3"
 minotaur = "2.9.0"
-modmenu = "18.0.0-alpha.8"
+modmenu = "21.0.0"
 
 [plugins]
 fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "fabric-loom" }

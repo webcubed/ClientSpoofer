@@ -9,25 +9,20 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.util.function.Function;
-import java.util.stream.Stream;
-
 @Mixin(AbstractSignEditScreen.class)
 public abstract class AbstractSignEditScreenMixin {
     @Redirect(
-            method = "<init>(Lnet/minecraft/world/level/block/entity/SignBlockEntity;ZZLnet/minecraft/network/chat/Component;)V",
-            at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;map(Ljava/util/function/Function;)Ljava/util/stream/Stream;"))
-    public Stream<String> init(Stream<Component> instance, Function<Component, String> function) {
-        return instance.map(message -> {
-            if (ClientSpoofer.getOptions().isHideMods()) {
-                String str = ComponentUtils.getString(message);
-                if (!str.equals(message.getString())) {
-                    ToastUtils.showServerAttemptedReadingModsToast();
-                }
-                return str;
-            } else {
-                return message.getString();
+            method = "<init>(Lnet/minecraft/world/level/block/entity/SignBlockEntity;Lnet/minecraft/world/level/block/entity/SignTextSlot;ZLnet/minecraft/network/chat/Component;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;getString()Ljava/lang/String;"))
+    public String init(Component instance) {
+        if (ClientSpoofer.getOptions().isHideMods()) {
+            String str = ComponentUtils.getString(instance);
+            if (!str.equals(instance.getString())) {
+                ToastUtils.showServerAttemptedReadingModsToast();
             }
-        });
+            return str;
+        } else {
+            return instance.getString();
+        }
     }
 }
